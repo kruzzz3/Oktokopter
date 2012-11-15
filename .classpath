@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-  <classpathentry kind="output" path="target/classes"/>
-  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.4/slf4j-api-1.6.4.jar"/>
-  <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-classic/1.0.0/logback-classic-1.0.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-core/1.0.0/logback-core-1.0.0.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock-junit4/2.5.1/jmock-junit4-2.5.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar"/>
-  <classpathentry kind="var" path="M2_REPO/junit/junit-dep/4.4/junit-dep-4.4.jar"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.4/slf4j-api-1.6.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-classic/1.0.0/logback-classic-1.0.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/ch/qos/logback/logback-core/1.0.0/logback-core-1.0.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/jmock/jmock-junit4/2.5.1/jmock-junit4-2.5.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/jmock/jmock/2.5.1/jmock-2.5.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/junit/junit-dep/4.4/junit-dep-4.4.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
