@@ -58,5 +58,10 @@ public class DefineLeaderToken implements IToken {
 		tokenId = id;
 	}
 
+	@Override
+	public boolean sendToNext() {
+		return true;
+	}
+
 
 }

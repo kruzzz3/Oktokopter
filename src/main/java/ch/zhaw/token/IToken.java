@@ -8,4 +8,6 @@ public interface IToken {
 	
 	public String getTokenDescription();
 	
+	public boolean sendToNext();
+	
 }

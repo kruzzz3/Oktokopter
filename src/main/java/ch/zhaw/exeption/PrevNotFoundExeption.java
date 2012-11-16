@@ -14,7 +14,6 @@ public class PrevNotFoundExeption extends Exception {
 	@Override
 	public void printStackTrace() {
 		Logger.error("PrevNotFoundExeption | "+thrower);
-		super.printStackTrace();
 	}
 
 }

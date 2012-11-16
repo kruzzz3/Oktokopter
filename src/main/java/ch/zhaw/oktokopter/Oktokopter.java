@@ -5,6 +5,8 @@ import ch.zhaw.exeption.NextNotFoundExeption;
 import ch.zhaw.token.DefineLeaderToken;
 import ch.zhaw.token.ETokenTyp;
 import ch.zhaw.token.IToken;
+import ch.zhaw.token.NextNotFoundToken;
+import ch.zhaw.token.PrevNotFoundToken;
 import ch.zhaw.token.TokenManager;
 import ch.zhaw.token.TokenStack;
 
@@ -34,15 +36,15 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 	}
 	
 	public boolean kill() {
-		prev.setNext(null);
-		next.setPrev(null);
+		if (getPrev() != null) { getPrev().setNext(null); }
+		if (getNext() != null) { getNext().setPrev(null); }
+		
 		return true;
 	}
 	
 	public void start() {
-		Logger.info(next.toString());
-		next.receiveToken(tokenManager.createDefineLeaderToken(this));
 		setWaitForToken(true);
+		getNext().receiveToken(tokenManager.createDefineLeaderToken(this));
 	}
 	
 	public boolean startLeaderOperation() {
@@ -67,7 +69,7 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 	@Override
 	public int hashCode() {
 		String buildTime = String.valueOf(getBuildTime());
-		buildTime.substring(5, buildTime.length());
+		buildTime = buildTime.substring(5, buildTime.length());
 		return Integer.parseInt(buildTime);
 	}
 
@@ -75,44 +77,114 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 	public boolean receiveToken(IToken token) {
 		Logger.info(toString()+" | receiveToken() -token="+token.toString());
 		ETokenTyp tokenTyp = tokenManager.decodeToken(token);
-		
-		if (tokenTyp == ETokenTyp.DEFINELEADERTOKEN) {
-			try {
+		try {
+			if (tokenTyp == ETokenTyp.DEFINELEADERTOKEN) {
 				operationDefineLeaderToken((DefineLeaderToken) token);
+				return true;
 			}
-			catch (NextNotFoundExeption e) {
-				e.printStackTrace();
-				tokenStack.push(token);
+			if (tokenTyp == ETokenTyp.NEXTNOTFOUNDTOKEN) {
+				operationNextNotFoundToken((NextNotFoundToken) token);
+				return true;
 			}
-			return true;
+			if (tokenTyp == ETokenTyp.PREVNOTFOUNDTOKEN) {
+				operationPrevNotFoundToken((PrevNotFoundToken) token);
+				return true;
+			}
 		}
+		catch (NextNotFoundExeption e) {
+			e.printStackTrace();
+			tokenStack.push(token);
+			setWaitForToken(true);
+			getPrev().receiveToken(tokenManager.createNextNotFoundToken(this));
+		}
+		/*
+		catch (PrevNotFoundExeption e) {
+			e.printStackTrace();
+			tokenStack.push(token);
+			setWaitForToken(true);
+			getNext().receiveToken(tokenManager.createPrevNotFoundToken(this));
+		}
+		*/
+		
 		return false;
 	}
 	
+	private void checkStack() {
+		if (isWaitForToken()) {
+			if (!tokenStack.isEmpty()) {
+				IToken token = tokenStack.pop();
+				if(token.sendToNext()) {
+					getNext().receiveToken(token);
+				}
+				else {
+					getPrev().receiveToken(token);
+				}
+			}
+			else {
+				setWaitForToken(false);
+			}
+		}
+	}
+	
 	private void operationDefineLeaderToken(DefineLeaderToken token) throws NextNotFoundExeption {
-		if (next == null) {
+		if (getNext() == null) {
 			throw new NextNotFoundExeption(toString());
 		}
 		if (token.isSet()) { // Ist der TokenInhalt festgesetzt?
 			if (token.getSenderOktokopter().equals(this)) {
 				setLeader(token.getLeader());
 				Logger.info("Neuer Leader ist "+token.getLeader().toString());
+				checkStack();
 			}
 			else {
 				setLeader(token.getLeader());
-				next.receiveToken(token);
+				getNext().receiveToken(token);
 			}
 		}
 		else if (token.getSenderOktokopter().equals(this)) { // Festsetzen des TokenInhalts
 			token.setSet(true);
-			next.receiveToken(token);
+			getNext().receiveToken(token);
 		}
 		else {
 			if (token.getLeader().getAkku() < getAkku()) {
 				token.setLeader(this);
 				setLeader(this);
 			}
-			next.receiveToken(token);
+			getNext().receiveToken(token);
+		}
+	}
+	
+	private void operationPrevNotFoundToken(PrevNotFoundToken token) {
+		if (token.getNext().equals(this)) {
+			Logger.info("Neuer Prev ist "+getPrev().toString());
+			checkStack();
+		}
+		else {
+			if (getNext() == null) {
+				setNext(token.getNext());
+				token.getNext().setPrev(this);
+				getNext().receiveToken(token);
+			}
+			else {
+				getNext().receiveToken(token);
+			}
+		}
+	}
+	
+	private void operationNextNotFoundToken(NextNotFoundToken token) {
+		if (token.getPrev().equals(this)) {
+			Logger.info("Neuer Next ist "+getNext().toString());
+			checkStack();
+		}
+		else {
+			if (getPrev() == null) {
+				setPrev(token.getPrev());
+				token.getPrev().setNext(this);
+				getPrev().receiveToken(token);
+			}
+			else {
+				getPrev().receiveToken(token);
+			}
 		}
 	}
 
@@ -189,7 +261,7 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 		else {
 			answer = "Slave-Oktokopter";
 		}
-		return answer+" "+getName()+" "+getAkku();
+		return answer+" "+getName()+" | Akku="+getAkku();
 	}
 	
 	@Override

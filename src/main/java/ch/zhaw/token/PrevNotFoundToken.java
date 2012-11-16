@@ -2,13 +2,13 @@ package ch.zhaw.token;
 
 import ch.zhaw.oktokopter.Oktokopter;
 
-public class NextNotFoundToken implements IToken {
+public class PrevNotFoundToken implements IToken {
 
-	private Oktokopter prev;
 	private Oktokopter next;
+	private Oktokopter prev;
 	private int tokenId;
 	
-	public NextNotFoundToken() {
+	public PrevNotFoundToken() {
 		setTokenId(Integer.parseInt(String.valueOf(System.currentTimeMillis()).substring(6)));
 	}
 	
@@ -31,7 +31,7 @@ public class NextNotFoundToken implements IToken {
 	
 	@Override
 	public String toString() {
-		return "NextNotFoundToken | id="+getTokenId()+" | von='"+getPrev().toString()+"'";
+		return "PrevNotFoundToken | id="+getTokenId()+" | von='"+getPrev().toString()+"'";
 	}
 
 	public Oktokopter getPrev() {
