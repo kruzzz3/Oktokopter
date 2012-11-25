@@ -1,5 +1,10 @@
 package ch.zhaw.oktokopter;
 
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
+
 import ch.zhaw.Logger;
 import ch.zhaw.exeption.NextNotFoundExeption;
 import ch.zhaw.token.DefineLeaderToken;
@@ -24,7 +29,22 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 	private int akku;
 	private boolean isWaitForToken;
 	
-	public Oktokopter(String name, int akku) {
+	private FixtureDef fd;
+	private BodyDef bd;
+	
+	private float posX;
+	
+	private float defaultPosX;
+	
+	private float posY;
+	
+	private float auftrieb = 55;
+	private float forceLeftRight = 0; // Minus = Left
+	
+	public Oktokopter(String name, int akku, float posX, float posY) {
+		this.posX = posX;
+		this.defaultPosX = posX;
+		this.posY = posY;
 		setName(name);
 		setAkku(akku);
 		setBuildTime(System.currentTimeMillis());
@@ -32,7 +52,37 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 		tokenStack = new TokenStack();
 		setWaitForToken(false);
 		setLeader(null);
+		
+		createFD();
+		createBD();
+		
 		Logger.info("Oktokopter "+toString()+" erstellt");
+	}
+	
+	private void createFD() {
+		PolygonShape shape = new PolygonShape();
+	    shape.setAsBox(1.0f, 1.0f);
+
+	    fd = new FixtureDef();
+	    fd.shape = shape;
+	    fd.density = 1.0f;
+	    fd.friction = 0.8f;
+	    fd.restitution = 0.0f;
+	}
+	
+	public FixtureDef getFD() {
+		return fd;
+	}
+	
+	private void createBD() {
+		bd = new BodyDef();
+    	bd.type = BodyType.DYNAMIC;
+        bd.position.set(posX, posY);
+        bd.fixedRotation = true;
+	}
+	
+	public BodyDef getBD() {
+		return bd;
 	}
 	
 	public boolean kill() {
@@ -246,6 +296,22 @@ public class Oktokopter implements IOktokopter, IReceiveToken {
 
 	public void setWaitForToken(boolean isWaitForToken) {
 		this.isWaitForToken = isWaitForToken;
+	}
+	
+	public void setAuftrieb(float auftrieb) {
+		this.auftrieb = auftrieb;
+	}
+	
+	public float getAuftrieb() {
+		return auftrieb;
+	}
+	
+	public float getForceLeftRight() {
+		return forceLeftRight;
+	}
+
+	public void setForceLeftRight(float forceLeftRight) {
+		this.forceLeftRight = forceLeftRight;
 	}
 	
 	//--------------------------------

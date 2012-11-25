@@ -24,7 +24,7 @@ public class Init {
 		// add tests
 		TestList.populateModel(model);                   // populate the provided testbed tests
 		model.addCategory("My Super Tests");             // add a category
-		model.addTest(new OctoProto());
+		model.addTest(new Simulation());
 
 		// add our custom setting "My Range Setting", with a default value of 10, between 0 and 20
 		model.getSettings().addSetting(new TestbedSetting("My Range Setting", SettingType.ENGINE, 10, 0, 20));
