@@ -3,3 +3,7 @@
 # Package Files #
 *.war
 *.ear
+
+# Eclipse project files
+.classpath
+.project
