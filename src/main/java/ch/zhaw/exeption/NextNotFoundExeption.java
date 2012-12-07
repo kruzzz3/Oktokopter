@@ -1,6 +1,6 @@
 package ch.zhaw.exeption;
 
-import ch.zhaw.Logger;
+import ch.zhaw.log.Logger;
 
 public class NextNotFoundExeption extends Exception {
 

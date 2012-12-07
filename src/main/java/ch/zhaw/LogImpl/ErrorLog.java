@@ -1,6 +1,6 @@
-package ch.zhaw.LogImpl;
+package ch.zhaw.logimpl;
 
-import ch.zhaw.ILog;
+import ch.zhaw.log.ILog;
 
 public class ErrorLog implements ILog {
 

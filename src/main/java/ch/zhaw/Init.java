@@ -10,7 +10,8 @@ import org.jbox2d.testbed.framework.TestbedSetting;
 import org.jbox2d.testbed.framework.TestbedSetting.SettingType;
 import org.jbox2d.testbed.framework.j2d.TestPanelJ2D;
 
-import ch.zhaw.LogImpl.SimpleLog;
+import ch.zhaw.log.Logger;
+import ch.zhaw.logimpl.SimpleLog;
 
 public class Init {
 	

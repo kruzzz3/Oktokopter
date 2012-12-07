@@ -1,6 +1,6 @@
 package ch.zhaw.token;
 
-import ch.zhaw.Logger;
+import ch.zhaw.log.Logger;
 import ch.zhaw.oktokopter.Oktokopter;
 
 public class TokenManager {

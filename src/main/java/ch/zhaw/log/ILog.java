@@ -1,4 +1,4 @@
-package ch.zhaw;
+package ch.zhaw.log;
 
 public interface ILog {
 
